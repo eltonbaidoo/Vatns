@@ -5,7 +5,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { TimeSeriesChart } from "./time-series-chart"
 import { useTimeSeriesStore } from "@/lib/store"
-import { Trash2, GripVertical, X, ZoomOut } from "lucide-react"
+import { Trash2, GripVertical, X } from "lucide-react"
 import { useState } from "react"
 
 interface PlotPanelProps {
@@ -23,7 +23,6 @@ export function PlotPanel({ plotId, index }: PlotPanelProps) {
     updatePlotTitle,
     removeChannelFromPlot,
     updateChannelColor,
-    resetZoom,
   } = useTimeSeriesStore()
 
   const plot = plots.find((p) => p.id === plotId)
@@ -71,18 +70,6 @@ export function PlotPanel({ plotId, index }: PlotPanelProps) {
           )}
         </div>
         <div className="flex items-center gap-1">
-          <Button
-            size="sm"
-            variant="outline"
-            onClick={(e) => {
-              e.stopPropagation()
-              resetZoom()
-            }}
-            className="gap-1"
-          >
-            <ZoomOut className="w-4 h-4" />
-            Reset Zoom
-          </Button>
           <Button
             size="sm"
             variant="ghost"
