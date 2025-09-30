@@ -2,11 +2,11 @@
 
 A modern React-based time-series data visualization dashboard built for analyzing CSV data with interactive plots, channel controls, and statistical analysis.
 
-## 🚀 Overview
+##  Overview
 
 Vatn Dashboard is a full-stack frontend application that allows users to upload CSV files and visualize time-series data through interactive plots. The application provides comprehensive tools for data analysis, including channel management, plot customization, zooming capabilities, and statistical calculations.
 
-## ✨ Features
+##  Features
 
 ### Core Functionality
 - **CSV Upload**: Drag-and-drop or file selection for CSV data upload
@@ -44,70 +44,99 @@ Vatn Dashboard is a full-stack frontend application that allows users to upload 
 - **class-variance-authority** - Component variant management
 - **date-fns** - Date manipulation utilities
 
-## 📁 Project Structure
+##  Project Structure
 
 ```
-vatn-dashboard/
-├── app/                    # Next.js app directory
-│   ├── globals.css        # Global styles and Tailwind configuration
-│   ├── layout.tsx         # Root layout component
-│   └── page.tsx          # Main application page
-├── components/            # React components
-│   ├── channel-controls.tsx    # Channel management controls
-│   ├── csv-uploader.tsx        # File upload component
-│   ├── plot-container.tsx      # Plot management container
-│   ├── plot.tsx               # Individual plot component
-│   ├── stats-panel.tsx        # Statistics display panel
-│   ├── theme-provider.tsx     # Theme context provider
-│   └── ui/                    # Reusable UI components
-├── hooks/                 # Custom React hooks
-├── lib/                   # Utility functions
-└── public/               # Static assets
+Vatns/
+├── time-series-viewer/           # Main Next.js application
+│   ├── app/                     # Next.js app directory
+│   │   ├── globals.css         # Global styles and Tailwind configuration
+│   │   ├── layout.tsx          # Root layout component
+│   │   └── page.tsx           # Main application page
+│   ├── components/             # React components
+│   │   ├── channel-list.tsx    # Channel management controls
+│   │   ├── csv-uploader.tsx    # File upload component
+│   │   ├── plot-grid.tsx       # Plot grid container
+│   │   ├── plot-panel.tsx      # Individual plot panel
+│   │   ├── global-stats.tsx    # Global statistics display
+│   │   ├── range-stats.tsx     # Range statistics display
+│   │   ├── time-series-chart.tsx # Chart component
+│   │   ├── theme-provider.tsx  # Theme context provider
+│   │   └── ui/                # Reusable UI components (Radix UI)
+│   ├── hooks/                 # Custom React hooks
+│   ├── lib/                   # Utility functions and state management
+│   ├── public/               # Static assets
+│   ├── package.json          # Dependencies and scripts
+│   └── pnpm-lock.yaml       # Lock file for exact dependency versions
+├── mock_data.csv             # Sample CSV data for testing
+├── README.md                 # Project documentation
+└── 2025 Full Stack Intern Take-Home Project (1).pdf  # Project requirements
 ```
 
-## 🚀 Getting Started
+##  Getting Started
 
 ### Prerequisites
 - Node.js 18+ 
-- npm, yarn, or pnpm
+- npm, yarn, or pnpm (pnpm recommended)
 
 ### Installation
 
 1. **Clone the repository**
    ```bash
-   git clone <repository-url>
-   cd vatn-dashboard
+   git clone https://github.com/eltonbaidoo/Vatns.git
+   cd Vatns
    ```
 
-2. **Install dependencies**
+2. **Navigate to the application directory**
    ```bash
+   cd time-series-viewer
+   ```
+
+3. **Install dependencies** (node_modules is not included in the repository)
+   ```bash
+   pnpm install
+   # or
    npm install
    # or
    yarn install
-   # or
-   pnpm install
    ```
 
-3. **Start the development server**
+4. **Start the development server**
    ```bash
+   pnpm dev
+   # or
    npm run dev
    # or
    yarn dev
-   # or
-   pnpm dev
    ```
 
-4. **Open your browser**
+5. **Open your browser**
    Navigate to [http://localhost:3000](http://localhost:3000)
+
+###  What's Included vs What You Need to Install
+
+**Included in Repository:**
+- All source code (`/time-series-viewer/`)
+- Package configuration (`package.json`, `pnpm-lock.yaml`)
+- Project documentation and assets
+- Sample CSV data (`mock_data.csv`)
+
+**Not Included (needs installation):**
+- `node_modules/` - Dependencies (install with `pnpm install`)
+- `.next/` - Build output (generated automatically)
+- Environment-specific files
 
 ### Build for Production
 
 ```bash
+pnpm build
+pnpm start
+# or
 npm run build
 npm start
 ```
 
-## 📊 Usage
+## Usage
 
 ### Uploading Data
 1. Click the upload area or drag and drop a CSV file
@@ -132,7 +161,7 @@ npm start
 - **Range Stats**: View statistics for selected data ranges
 - **Real-time Updates**: Statistics update automatically as you interact with data
 
-## 🎨 Design System
+## Design System
 
 ### Color Palette
 - **Primary Blue**: #B0CDD9
@@ -146,7 +175,7 @@ npm start
 - **Responsive**: Mobile-first design approach
 - **Theme Support**: Dark/light mode capabilities
 
-## 🔧 Development
+##  Development
 
 ### Code Structure
 - **TypeScript**: Full type safety throughout the application
@@ -171,7 +200,7 @@ Interface for managing data channels, colors, and channel-specific settings.
 #### StatsPanel
 Displays statistical information for datasets and selected ranges.
 
-## 🚀 Deployment
+##  Deployment
 
 ### Build Process
 ```bash
@@ -187,7 +216,7 @@ No environment variables required for basic functionality.
 - **Docker**: Containerized deployment
 - **Traditional Hosting**: Static file serving
 
-## 🔮 Future Enhancements
+##  Future Enhancements
 
 ### Backend Integration
 While currently frontend-only, the application is designed to easily integrate with backend services:
@@ -205,7 +234,7 @@ While currently frontend-only, the application is designed to easily integrate w
 - **Collaboration**: Shared analysis sessions
 - **Mobile App**: React Native version
 
-## 🤝 Contributing
+## Contributing
 
 1. Fork the repository
 2. Create a feature branch
@@ -213,14 +242,14 @@ While currently frontend-only, the application is designed to easily integrate w
 4. Add tests if applicable
 5. Submit a pull request
 
-## 📄 License
+##  License
 
 This project is part of a take-home assignment. Please refer to the project requirements for usage guidelines.
 
-## 📞 Support
+##  Support
 
 For questions or support regarding this project, please refer to the project documentation or contact the development team.
 
 ---
 
-**Built with ❤️ using React, Next.js, and modern web technologies.**
+**Built with  using React, Next.js, and modern web technologies.**
