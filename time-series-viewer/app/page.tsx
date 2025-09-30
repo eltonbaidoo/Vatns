@@ -3,9 +3,8 @@
 import type React from "react"
 
 import { useRouter } from "next/navigation"
-import { Upload, LineChart, Zap } from "lucide-react"
+import { Upload, LineChart } from "lucide-react"
 import { Card } from "@/components/ui/card"
-import { Button } from "@/components/ui/button"
 import { parseCSV } from "@/lib/csv"
 import { useTimeSeriesStore } from "@/lib/store"
 import { useToast } from "@/hooks/use-toast"
@@ -13,7 +12,7 @@ import { Toaster } from "@/components/ui/toaster"
 
 export default function UploadPage() {
   const router = useRouter()
-  const { rows, setRows } = useTimeSeriesStore()
+  const { setRows } = useTimeSeriesStore()
   const { toast } = useToast()
 
   const handleFile = async (file: File) => {
@@ -49,10 +48,6 @@ export default function UploadPage() {
     }
   }
 
-  const handleUseDemoData = () => {
-    router.push("/viewer")
-  }
-
   return (
     <div className="min-h-screen bg-gradient-to-br from-background via-background to-muted/20 flex items-center justify-center p-4">
       <div className="w-full max-w-2xl space-y-8">
@@ -60,7 +55,7 @@ export default function UploadPage() {
         <div className="text-center space-y-3">
           <div className="flex items-center justify-center gap-2 mb-4">
             <LineChart className="w-10 h-10 text-primary" />
-            <h1 className="text-4xl font-bold text-balance">Time-Series Viewer</h1>
+            <h1 className="text-4xl font-bold text-balance">{"Vatn Take Home"}</h1>
           </div>
           <p className="text-lg text-muted-foreground text-balance">
             Upload your CSV data to visualize time-series channels with interactive overlays and zoom controls
@@ -69,7 +64,7 @@ export default function UploadPage() {
 
         {/* Upload Card */}
         <Card
-          className="border-2 border-dashed p-12 hover:border-primary/50 transition-all cursor-pointer hover:shadow-lg"
+          className="border-dashed p-12 hover:border-primary/50 transition-all cursor-pointer hover:shadow-lg bg-[rgba(176,205,217,1)] border-2 rounded-full"
           onDrop={handleDrop}
           onDragOver={(e) => e.preventDefault()}
         >
@@ -84,21 +79,6 @@ export default function UploadPage() {
             <input type="file" accept=".csv" onChange={handleChange} className="sr-only" />
           </label>
         </Card>
-
-        {/* Demo Data Option */}
-        <div className="relative">
-          <div className="absolute inset-0 flex items-center">
-            <span className="w-full border-t" />
-          </div>
-          <div className="relative flex justify-center text-xs uppercase">
-            <span className="bg-background px-2 text-muted-foreground">Or</span>
-          </div>
-        </div>
-
-        <Button onClick={handleUseDemoData} variant="outline" size="lg" className="w-full gap-2 bg-transparent">
-          <Zap className="w-4 h-4" />
-          Continue with Demo Data
-        </Button>
       </div>
       <Toaster />
     </div>

@@ -17,7 +17,7 @@ export function PlotGrid() {
             <RotateCcw className="w-4 h-4 mr-2" />
             Reset Zoom
           </Button>
-          <Button size="sm" onClick={addPlot}>
+          <Button size="sm" onClick={addPlot} className="bg-[#B0CDD9] hover:bg-[#9DBDCA] text-slate-900">
             <Plus className="w-4 h-4 mr-2" />
             Add Plot
           </Button>

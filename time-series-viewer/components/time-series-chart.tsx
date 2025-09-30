@@ -2,7 +2,6 @@
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Brush } from "recharts"
 import type { TimeSeriesRow } from "@/lib/csv"
-import { formatTime } from "@/lib/time"
 import { useTimeSeriesStore } from "@/lib/store"
 
 interface TimeSeriesChartProps {
@@ -30,12 +29,20 @@ export function TimeSeriesChart({ data, xAxis, yAxes, plotId, channelColors }: T
     }
   }
 
-  const isTimeAxis = xAxis.toLowerCase().includes("time") || xAxis === "t"
-  const xAxisFormatter = isTimeAxis ? formatTime : (value: number) => value.toFixed(2)
+  const xAxisFormatter = (value: number) => {
+    // Format large numbers with appropriate precision
+    if (Math.abs(value) >= 1000) {
+      return value.toFixed(0)
+    } else if (Math.abs(value) >= 1) {
+      return value.toFixed(2)
+    } else {
+      return value.toFixed(4)
+    }
+  }
 
   return (
-    <ResponsiveContainer width="100%" height={400}>
-      <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+    <ResponsiveContainer width="100%" height={500}>
+      <LineChart data={data} margin={{ top: 20, right: 40, left: 20, bottom: 100 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
         <XAxis
           dataKey={xAxis}
@@ -43,9 +50,10 @@ export function TimeSeriesChart({ data, xAxis, yAxes, plotId, channelColors }: T
           domain={["dataMin", "dataMax"]}
           tickFormatter={xAxisFormatter}
           stroke="hsl(var(--foreground))"
-          label={{ value: xAxis, position: "insideBottom", offset: -5 }}
+          label={{ value: xAxis, position: "insideBottom", offset: -10 }}
+          height={60}
         />
-        <YAxis stroke="hsl(var(--foreground))" />
+        <YAxis stroke="hsl(var(--foreground))" width={60} />
         <Tooltip
           labelFormatter={xAxisFormatter}
           contentStyle={{
@@ -54,7 +62,13 @@ export function TimeSeriesChart({ data, xAxis, yAxes, plotId, channelColors }: T
             borderRadius: "var(--radius)",
           }}
         />
-        <Legend />
+        <Legend
+          verticalAlign="bottom"
+          wrapperStyle={{
+            paddingTop: "30px",
+            paddingBottom: "10px",
+          }}
+        />
         {yAxes.map((yAxis) => (
           <Line
             key={yAxis}
@@ -68,10 +82,11 @@ export function TimeSeriesChart({ data, xAxis, yAxes, plotId, channelColors }: T
         ))}
         <Brush
           dataKey={xAxis}
-          height={30}
+          height={40}
           stroke="hsl(var(--primary))"
           onChange={handleBrushChange}
           tickFormatter={xAxisFormatter}
+          y={440}
         />
       </LineChart>
     </ResponsiveContainer>

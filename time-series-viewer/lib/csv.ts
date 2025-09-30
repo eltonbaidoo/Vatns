@@ -1,5 +1,4 @@
 import Papa from "papaparse"
-import { secondsToMs } from "./time"
 
 export interface TimeSeriesRow {
   [key: string]: number | undefined
@@ -24,12 +23,7 @@ export function parseCSV(file: File): Promise<TimeSeriesRow[]> {
 
               const value = row[key]
               if (typeof value === "number" && !isNaN(value)) {
-                // Convert time columns from seconds to milliseconds
-                if (key.toLowerCase().includes("time") || key === "t") {
-                  normalized[key] = secondsToMs(value)
-                } else {
-                  normalized[key] = value
-                }
+                normalized[key] = value
               }
             })
 
@@ -55,7 +49,7 @@ export function generateDemoData(): TimeSeriesRow[] {
   const rows: TimeSeriesRow[] = []
   for (let i = 0; i < 20; i++) {
     rows.push({
-      "time (s)": secondsToMs(i),
+      "time (s)": i,
       roll_deg: Math.sin(i * 0.5) * 10 + Math.random() * 2,
       pitch_deg: Math.cos(i * 0.3) * 8 + Math.random() * 2,
       yaw_deg: i * 2 + Math.random() * 5,

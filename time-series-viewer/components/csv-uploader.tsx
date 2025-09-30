@@ -56,7 +56,7 @@ export function CSVUploader() {
 
   return (
     <Card
-      className="border-2 border-dashed p-6 hover:border-primary/50 transition-colors cursor-pointer"
+      className="border-2 border-dashed p-6 hover:border-primary/50 transition-colors cursor-pointer bg-[rgba(176,205,217,1)]"
       onDrop={handleDrop}
       onDragOver={(e) => e.preventDefault()}
     >

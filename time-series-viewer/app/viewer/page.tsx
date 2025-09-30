@@ -36,7 +36,12 @@ export default function ViewerPage() {
               Visualize time-series channels with interactive overlays and zoom controls
             </p>
           </div>
-          <Button onClick={handleBackToUpload} variant="outline" size="sm" className="gap-2 bg-transparent">
+          <Button
+            onClick={handleBackToUpload}
+            variant="outline"
+            size="sm"
+            className="gap-2 bg-[#B0CDD9] hover:bg-[#9DBDCA] text-slate-900 border-[#B0CDD9] hover:border-[#9DBDCA]"
+          >
             <ArrowLeft className="w-4 h-4" />
             Back to Upload
           </Button>
