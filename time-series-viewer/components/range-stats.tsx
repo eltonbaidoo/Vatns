@@ -11,14 +11,18 @@ export function RangeStats() {
   const focusedPlot = plots.find((p) => p.id === focusedPlotId)
 
   const stats = useMemo(() => {
-    if (!focusedPlot || !selection || focusedPlot.channels.length === 0) return null
+    if (!focusedPlot || !selection || focusedPlot.yAxes.length === 0) return null
 
-    const filteredRows = rows.filter((row) => row.t >= selection.t0 && row.t <= selection.t1)
+    const xAxisKey = focusedPlot.xAxis
+    const filteredRows = rows.filter((row) => {
+      const xValue = row[xAxisKey]
+      return xValue !== undefined && xValue >= selection.t0 && xValue <= selection.t1
+    })
 
-    const channelStats = focusedPlot.channels.map((channel) => {
-      const values = filteredRows.map((row) => row[channel]).filter((v): v is number => v !== undefined)
+    const channelStats = focusedPlot.yAxes.map((yAxis) => {
+      const values = filteredRows.map((row) => row[yAxis]).filter((v): v is number => v !== undefined)
       return {
-        channel,
+        channel: yAxis,
         stats: calculateStats(values),
       }
     })

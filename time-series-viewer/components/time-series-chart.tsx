@@ -1,49 +1,53 @@
 "use client"
 
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer, Brush } from "recharts"
-import type { TimeSeriesRow, ChannelName } from "@/lib/csv"
+import type { TimeSeriesRow } from "@/lib/csv"
 import { formatTime } from "@/lib/time"
 import { useTimeSeriesStore } from "@/lib/store"
 
 interface TimeSeriesChartProps {
   data: TimeSeriesRow[]
-  channels: ChannelName[]
+  xAxis: string
+  yAxes: string[]
   plotId: string
   channelColors: Record<string, string>
 }
 
-export function TimeSeriesChart({ data, channels, plotId, channelColors }: TimeSeriesChartProps) {
-  const { xDomain, setXDomain, setSelection } = useTimeSeriesStore()
+export function TimeSeriesChart({ data, xAxis, yAxes, plotId, channelColors }: TimeSeriesChartProps) {
+  const { setSelection } = useTimeSeriesStore()
 
-  if (channels.length === 0) {
-    return <div className="h-[400px] flex items-center justify-center text-muted-foreground">No channels selected</div>
+  if (yAxes.length === 0) {
+    return <div className="h-[400px] flex items-center justify-center text-muted-foreground">No Y-axes selected</div>
   }
 
   const handleBrushChange = (brushData: any) => {
     if (brushData && brushData.startIndex !== undefined && brushData.endIndex !== undefined) {
-      const start = data[brushData.startIndex]?.t
-      const end = data[brushData.endIndex]?.t
+      const start = data[brushData.startIndex]?.[xAxis]
+      const end = data[brushData.endIndex]?.[xAxis]
       if (start !== undefined && end !== undefined) {
         setSelection({ t0: start, t1: end })
-        setXDomain([start, end])
       }
     }
   }
+
+  const isTimeAxis = xAxis.toLowerCase().includes("time") || xAxis === "t"
+  const xAxisFormatter = isTimeAxis ? formatTime : (value: number) => value.toFixed(2)
 
   return (
     <ResponsiveContainer width="100%" height={400}>
       <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
         <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
         <XAxis
-          dataKey="t"
+          dataKey={xAxis}
           type="number"
-          domain={xDomain || ["dataMin", "dataMax"]}
-          tickFormatter={formatTime}
+          domain={["dataMin", "dataMax"]}
+          tickFormatter={xAxisFormatter}
           stroke="hsl(var(--foreground))"
+          label={{ value: xAxis, position: "insideBottom", offset: -5 }}
         />
         <YAxis stroke="hsl(var(--foreground))" />
         <Tooltip
-          labelFormatter={formatTime}
+          labelFormatter={xAxisFormatter}
           contentStyle={{
             backgroundColor: "hsl(var(--popover))",
             border: "1px solid hsl(var(--border))",
@@ -51,23 +55,23 @@ export function TimeSeriesChart({ data, channels, plotId, channelColors }: TimeS
           }}
         />
         <Legend />
-        {channels.map((channel) => (
+        {yAxes.map((yAxis) => (
           <Line
-            key={channel}
+            key={yAxis}
             type="monotone"
-            dataKey={channel}
-            stroke={channelColors[channel] || "#000000"}
+            dataKey={yAxis}
+            stroke={channelColors[yAxis] || "#000000"}
             strokeWidth={2}
             dot={false}
-            name={channel}
+            name={yAxis}
           />
         ))}
         <Brush
-          dataKey="t"
+          dataKey={xAxis}
           height={30}
           stroke="hsl(var(--primary))"
           onChange={handleBrushChange}
-          tickFormatter={formatTime}
+          tickFormatter={xAxisFormatter}
         />
       </LineChart>
     </ResponsiveContainer>

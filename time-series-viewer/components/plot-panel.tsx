@@ -3,8 +3,10 @@
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { TimeSeriesChart } from "./time-series-chart"
 import { useTimeSeriesStore } from "@/lib/store"
+import { getAvailableColumns } from "@/lib/csv"
 import { Trash2, GripVertical, X } from "lucide-react"
 import { useState } from "react"
 
@@ -21,7 +23,8 @@ export function PlotPanel({ plotId, index }: PlotPanelProps) {
     setFocusedPlot,
     removePlot,
     updatePlotTitle,
-    removeChannelFromPlot,
+    updatePlotXAxis,
+    removeYAxisFromPlot,
     updateChannelColor,
   } = useTimeSeriesStore()
 
@@ -32,6 +35,7 @@ export function PlotPanel({ plotId, index }: PlotPanelProps) {
   if (!plot) return null
 
   const isFocused = focusedPlotId === plotId
+  const availableColumns = getAvailableColumns(rows)
 
   const handleTitleSubmit = () => {
     if (titleInput.trim()) {
@@ -83,28 +87,46 @@ export function PlotPanel({ plotId, index }: PlotPanelProps) {
         </div>
       </CardHeader>
       <CardContent>
-        {plot.channels.length > 0 && (
+        <div className="mb-4 space-y-2">
+          <div className="flex items-center gap-2">
+            <label className="text-sm font-medium text-muted-foreground w-16">X-Axis:</label>
+            <Select value={plot.xAxis} onValueChange={(value) => updatePlotXAxis(plotId, value)}>
+              <SelectTrigger className="h-8 text-sm flex-1">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                {availableColumns.map((col) => (
+                  <SelectItem key={col} value={col}>
+                    {col}
+                  </SelectItem>
+                ))}
+              </SelectContent>
+            </Select>
+          </div>
+        </div>
+
+        {plot.yAxes.length > 0 && (
           <div className="flex flex-wrap gap-2 mb-4">
-            {plot.channels.map((channel) => (
-              <div key={channel} className="flex items-center gap-1 bg-secondary rounded-md px-2 py-1">
+            {plot.yAxes.map((yAxis) => (
+              <div key={yAxis} className="flex items-center gap-1 bg-secondary rounded-md px-2 py-1">
                 <input
                   type="color"
-                  value={plot.channelColors[channel] || "#000000"}
+                  value={plot.channelColors[yAxis] || "#000000"}
                   onChange={(e) => {
                     e.stopPropagation()
-                    updateChannelColor(plotId, channel, e.target.value)
+                    updateChannelColor(plotId, yAxis, e.target.value)
                   }}
                   className="w-5 h-5 rounded cursor-pointer border-0"
                   title="Change color"
                 />
-                <span className="text-xs font-medium">{channel}</span>
+                <span className="text-xs font-medium">{yAxis}</span>
                 <Button
                   size="sm"
                   variant="ghost"
                   className="h-4 w-4 p-0 hover:bg-destructive/20"
                   onClick={(e) => {
                     e.stopPropagation()
-                    removeChannelFromPlot(plotId, channel)
+                    removeYAxisFromPlot(plotId, yAxis)
                   }}
                 >
                   <X className="w-3 h-3" />
@@ -113,7 +135,13 @@ export function PlotPanel({ plotId, index }: PlotPanelProps) {
             ))}
           </div>
         )}
-        <TimeSeriesChart data={rows} channels={plot.channels} plotId={plotId} channelColors={plot.channelColors} />
+        <TimeSeriesChart
+          data={rows}
+          xAxis={plot.xAxis}
+          yAxes={plot.yAxes}
+          plotId={plotId}
+          channelColors={plot.channelColors}
+        />
       </CardContent>
     </Card>
   )

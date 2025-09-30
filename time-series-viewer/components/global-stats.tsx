@@ -11,12 +11,12 @@ export function GlobalStats() {
   const focusedPlot = plots.find((p) => p.id === focusedPlotId)
 
   const stats = useMemo(() => {
-    if (!focusedPlot || focusedPlot.channels.length === 0) return null
+    if (!focusedPlot || focusedPlot.yAxes.length === 0) return null
 
-    const channelStats = focusedPlot.channels.map((channel) => {
-      const values = rows.map((row) => row[channel]).filter((v): v is number => v !== undefined)
+    const channelStats = focusedPlot.yAxes.map((yAxis) => {
+      const values = rows.map((row) => row[yAxis]).filter((v): v is number => v !== undefined)
       return {
-        channel,
+        channel: yAxis,
         stats: calculateStats(values),
       }
     })

@@ -1,17 +1,16 @@
 "use client"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { ChannelName } from "@/lib/csv"
 import { useTimeSeriesStore } from "@/lib/store"
+import { getAvailableColumns } from "@/lib/csv"
 import { Plus, X } from "lucide-react"
 
 export function ChannelList() {
-  const { rows, plots, focusedPlotId, addChannelToPlot, removeChannelFromPlot } = useTimeSeriesStore()
+  const { rows, plots, focusedPlotId, addYAxisToPlot, removeYAxisFromPlot } = useTimeSeriesStore()
 
   const focusedPlot = plots.find((p) => p.id === focusedPlotId)
 
-  const availableChannels: ChannelName[] =
-    rows.length > 0 ? (Object.keys(rows[0]).filter((key) => key !== "time_ms") as ChannelName[]) : []
+  const availableColumns = getAvailableColumns(rows)
 
   if (rows.length === 0) {
     return (
@@ -45,17 +44,21 @@ export function ChannelList() {
         <CardTitle className="text-sm">Channels for {focusedPlot.title}</CardTitle>
       </CardHeader>
       <CardContent className="space-y-2">
-        {availableChannels.map((channel) => {
-          const isActive = focusedPlot.channels.includes(channel)
+        {availableColumns.map((column) => {
+          const isActive = focusedPlot.yAxes.includes(column)
+          const isXAxis = focusedPlot.xAxis === column
           return (
-            <div key={channel} className="flex items-center justify-between gap-2">
-              <span className="text-sm font-mono">{channel}</span>
+            <div key={column} className="flex items-center justify-between gap-2">
+              <span className="text-sm font-mono flex items-center gap-2">
+                {column}
+                {isXAxis && <span className="text-xs text-muted-foreground">(X-axis)</span>}
+              </span>
               {isActive ? (
-                <Button size="sm" variant="ghost" onClick={() => removeChannelFromPlot(focusedPlot.id, channel)}>
+                <Button size="sm" variant="ghost" onClick={() => removeYAxisFromPlot(focusedPlot.id, column)}>
                   <X className="w-4 h-4" />
                 </Button>
               ) : (
-                <Button size="sm" variant="ghost" onClick={() => addChannelToPlot(focusedPlot.id, channel)}>
+                <Button size="sm" variant="ghost" onClick={() => addYAxisToPlot(focusedPlot.id, column)}>
                   <Plus className="w-4 h-4" />
                 </Button>
               )}

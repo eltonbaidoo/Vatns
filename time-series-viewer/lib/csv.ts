@@ -1,26 +1,8 @@
 import Papa from "papaparse"
 import { secondsToMs } from "./time"
 
-export type ChannelName =
-  | "roll_deg"
-  | "pitch_deg"
-  | "yaw_deg"
-  | "depth"
-  | "vel_x_m_s"
-  | "vel_y_m_s"
-  | "northing_m"
-  | "easting_m"
-
 export interface TimeSeriesRow {
-  t: number // time in milliseconds
-  roll_deg?: number
-  pitch_deg?: number
-  yaw_deg?: number
-  depth?: number
-  vel_x_m_s?: number
-  vel_y_m_s?: number
-  northing_m?: number
-  easting_m?: number
+  [key: string]: number | undefined
 }
 
 /**
@@ -35,26 +17,19 @@ export function parseCSV(file: File): Promise<TimeSeriesRow[]> {
       complete: (results) => {
         try {
           const rows = results.data.map((row: any) => {
-            const normalized: TimeSeriesRow = {
-              t: secondsToMs(row["time (s)"] || 0),
-            }
+            const normalized: TimeSeriesRow = {}
 
-            // Add channel values if they're numeric
-            const channels: ChannelName[] = [
-              "roll_deg",
-              "pitch_deg",
-              "yaw_deg",
-              "depth",
-              "vel_x_m_s",
-              "vel_y_m_s",
-              "northing_m",
-              "easting_m",
-            ]
+            Object.keys(row).forEach((key) => {
+              if (!key || key.trim() === "") return
 
-            channels.forEach((channel) => {
-              const value = row[channel]
+              const value = row[key]
               if (typeof value === "number" && !isNaN(value)) {
-                normalized[channel] = value
+                // Convert time columns from seconds to milliseconds
+                if (key.toLowerCase().includes("time") || key === "t") {
+                  normalized[key] = secondsToMs(value)
+                } else {
+                  normalized[key] = value
+                }
               }
             })
 
@@ -80,7 +55,7 @@ export function generateDemoData(): TimeSeriesRow[] {
   const rows: TimeSeriesRow[] = []
   for (let i = 0; i < 20; i++) {
     rows.push({
-      t: secondsToMs(i),
+      "time (s)": secondsToMs(i),
       roll_deg: Math.sin(i * 0.5) * 10 + Math.random() * 2,
       pitch_deg: Math.cos(i * 0.3) * 8 + Math.random() * 2,
       yaw_deg: i * 2 + Math.random() * 5,
@@ -92,4 +67,12 @@ export function generateDemoData(): TimeSeriesRow[] {
     })
   }
   return rows
+}
+
+/**
+ * Get all available column names from the data
+ */
+export function getAvailableColumns(rows: TimeSeriesRow[]): string[] {
+  if (rows.length === 0) return []
+  return Object.keys(rows[0]).filter((key) => key && key.trim() !== "" && rows[0][key] !== undefined)
 }

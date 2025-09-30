@@ -99,31 +99,6 @@ export default function UploadPage() {
           <Zap className="w-4 h-4" />
           Continue with Demo Data
         </Button>
-
-        {/* Features */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-4 pt-8">
-          <Card className="p-4 text-center space-y-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-              <LineChart className="w-5 h-5 text-primary" />
-            </div>
-            <h3 className="font-medium text-sm">Multi-Channel Overlay</h3>
-            <p className="text-xs text-muted-foreground">Visualize multiple channels on a single plot</p>
-          </Card>
-          <Card className="p-4 text-center space-y-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-              <Zap className="w-5 h-5 text-primary" />
-            </div>
-            <h3 className="font-medium text-sm">Interactive Zoom</h3>
-            <p className="text-xs text-muted-foreground">Zoom and pan to explore your data</p>
-          </Card>
-          <Card className="p-4 text-center space-y-2">
-            <div className="w-10 h-10 rounded-full bg-primary/10 flex items-center justify-center mx-auto">
-              <Upload className="w-5 h-5 text-primary" />
-            </div>
-            <h3 className="font-medium text-sm">Easy Upload</h3>
-            <p className="text-xs text-muted-foreground">Drag and drop CSV files to get started</p>
-          </Card>
-        </div>
       </div>
       <Toaster />
     </div>
